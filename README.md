@@ -7,10 +7,6 @@
 - Hook 层由 YukiHookAPI 迁移为 **libxposed API 101 原生写法**（`hook(executable).intercept { chain -> ... }`，无 `XposedHelpers` 封装）
 - 界面由 PreferenceFragment 迁移为 **miuix（Compose Multiplatform）** 风格
 
-## 适配范围
-
-os1 **~** os3a15
-
 ## 功能
 
 - **总开关**：一键启用/禁用全部小白条功能，未开启时下方选项不可用
@@ -29,7 +25,7 @@ os1 **~** os3a15
 | 项目 | 要求 |
 |---|---|
 | 框架 | 支持 libxposed API 101 的 Xposed 框架（如 LSPosed） |
-| 系统 | HyperOS，Android 13（API 33）及以上 |
+| 系统 | OS1 A14 ~ OS3 A15 |
 | 权限 | Root（用于重启系统界面；小白条功能本身不依赖 Root） |
 | 作用域 | `com.android.systemui` |
 

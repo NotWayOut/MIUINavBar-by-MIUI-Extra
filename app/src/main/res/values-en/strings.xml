@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MIUINavBar</string>
+    <string name="xposed_desc">Animation and immersive support for the HyperOS/MIUI home handle and gesture bar</string>
+
+    <!-- Page titles -->
+    <string name="home_handle_header">Home Handle and Gesture Bar</string>
+    <string name="home_handle_anim_custom_title">Custom Home Handle State</string>
+
+    <!-- Master switch -->
+    <string name="chen_home_handle_anim_title">Master switch</string>
+
+    <!-- Immersive gesture bar -->
+    <string name="chen_home_handle_no_space_title">Immersive Gesture Bar</string>
+    <string name="chen_home_handle_no_space_summary">The gesture bar will no longer take up space (may introduce layout errors, use with caution)</string>
+
+    <!-- Blur material -->
+    <string name="chen_home_handle_blur_effect_title">Apply blur material on the home handle (advanced material required)</string>
+
+    <!-- Follow-finger movement -->
+    <string name="home_handle_disable_move_event_title">Disable home handle follow movement</string>
+
+    <!-- Custom animation -->
+    <string name="normal_state_title">Normal</string>
+    <string name="pressed_state_title">Pressed</string>
+    <string name="home_state_title">On Home</string>
+    <string name="home_handle_auto_trans_alphaval_title">Auto transparent degree</string>
+    <string name="home_handle_scale_x_title">Scale X</string>
+    <string name="home_handle_scale_y_title">Scale Y</string>
+    <string name="home_handle_offset_x_title">Offset X</string>
+    <string name="home_handle_offset_y_title">Offset Y</string>
+    <string name="home_handle_anim_duration_alpha">Alpha/Blur anim duration</string>
+    <string name="home_handle_anim_duration_scale">Scale anim duration</string>
+    <string name="home_handle_anim_duration_xy">Translation anim duration</string>
+    <string name="home_handle_force_alpha_at_home_title">Force alpha adjustment on home</string>
+    <string name="home_handle_force_alpha_at_home_summary">The transparent animation will adjust alpha instead of the blur level and remove the blur material</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="input_value_invalid">Input value invalid!</string>
+    <string name="need_restart_systemui">This setting requires a SystemUI restart to take effect</string>
+    <string name="restart_systemui">Restart SystemUI</string>
+    <string name="hide_launcher_icon">Hide launcher icon</string>
+
+    <!-- Backup & restore -->
+    <string name="backup">Save Settings</string>
+    <string name="backup_success">Settings saved successfully!</string>
+    <string name="backup_failed">Failed to save settings!</string>
+    <string name="restore">Restore Settings</string>
+    <string name="restore_success">Settings restored successfully!</string>
+    <string name="restore_failed">Failed to restore settings!</string>
+    <string name="restore_invalid_file">Please select a .json config file!</string>
+
+    <!-- Framework status -->
+    <string name="framework_ok">Module activated</string>
+    <string name="framework_ok_tips">Activated via %1$s API %2$d</string>
+    <string name="framework_inactive">Module not activated</string>
+    <string name="framework_inactive_tips">Activate this module in your Xposed manager and check the SystemUI scope</string>
+    <string name="framework_unsupported">Framework version too low</string>
+    <string name="framework_unsupported_tips">The current framework API version is unsupported, libXposed API 101 or above is required</string>
+    <string name="framework_no_root">Root permission not granted</string>
+    <string name="framework_no_root_tips">Home handle animation works; restarting SystemUI requires root</string>
+    <string name="restart_failed">Failed to restart SystemUI, please check root permission</string>
+
+
+</resources>

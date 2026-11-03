@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MIUINavBar</string>
+    <string name="xposed_desc">为 HyperOS/MIUI 的小白条与手势栏提供动画与沉浸式支持</string>
+
+    <!-- 页面标题 -->
+    <string name="home_handle_header">小白条与手势栏</string>
+    <string name="home_handle_anim_custom_title">自定义小白条状态</string>
+
+    <!-- 主开关 -->
+    <string name="chen_home_handle_anim_title">总开关</string>
+
+    <!-- 沉浸式手势栏 -->
+    <string name="chen_home_handle_no_space_title">沉浸式手势栏</string>
+    <string name="chen_home_handle_no_space_summary">手势栏将不再占位(可能引入布局错误，慎用)</string>
+
+    <!-- 模糊材质 -->
+    <string name="chen_home_handle_blur_effect_title">在小白条上应用模糊材质(需要开启高级材质)</string>
+
+    <!-- 跟手位移 -->
+    <string name="home_handle_disable_move_event_title">禁用小白条跟手位移</string>
+
+    <!-- 自定义动画 -->
+    <string name="normal_state_title">默认时</string>
+    <string name="pressed_state_title">按下时</string>
+    <string name="home_state_title">在桌面时</string>
+    <string name="home_handle_auto_trans_alphaval_title">自动透明程度</string>
+    <string name="home_handle_scale_x_title">横向缩放</string>
+    <string name="home_handle_scale_y_title">纵向缩放</string>
+    <string name="home_handle_offset_x_title">X轴偏移</string>
+    <string name="home_handle_offset_y_title">Y轴偏移</string>
+    <string name="home_handle_anim_duration_alpha">透明或模糊动画时长</string>
+    <string name="home_handle_anim_duration_scale">缩放动画时长</string>
+    <string name="home_handle_anim_duration_xy">位移动画时长</string>
+    <string name="home_handle_force_alpha_at_home_title">在桌面时强制使用透明度调整</string>
+    <string name="home_handle_force_alpha_at_home_summary">透明动画将调整透明度而不是模糊级别，并将去除模糊材质</string>
+
+    <!-- 通用 -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="input_value_invalid">输入数值无效!</string>
+    <string name="need_restart_systemui">该设置需要重启系统界面才能生效</string>
+    <string name="restart_systemui">重启系统界面</string>
+    <string name="hide_launcher_icon">隐藏桌面图标</string>
+
+    <!-- 备份恢复 -->
+    <string name="backup">备份配置</string>
+    <string name="backup_success">备份配置成功!</string>
+    <string name="backup_failed">备份配置失败!</string>
+    <string name="restore">恢复配置</string>
+    <string name="restore_success">恢复配置成功!</string>
+    <string name="restore_failed">恢复配置失败!</string>
+    <string name="restore_invalid_file">请选择 .json 后缀的配置文件!</string>
+
+    <!-- 框架状态 -->
+    <string name="framework_ok">模块已激活</string>
+    <string name="framework_ok_tips">通过 %1$s API %2$d 激活</string>
+    <string name="framework_inactive">模块未激活</string>
+    <string name="framework_inactive_tips">请在 Xposed 管理器中激活本模块，并勾选系统界面作用域</string>
+    <string name="framework_unsupported">框架版本过低</string>
+    <string name="framework_unsupported_tips">当前框架 API 版本不受支持，需要 libXposed API 101 及以上</string>
+    <string name="framework_no_root">未获取 Root 权限</string>
+    <string name="framework_no_root_tips">小白条动画可正常使用，重启系统界面需要 Root 权限</string>
+    <string name="restart_failed">重启系统界面失败，请检查 Root 权限</string>
+
+
+</resources>

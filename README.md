@@ -7,7 +7,7 @@
 - Hook 层由 YukiHookAPI 迁移为 **libxposed API 101 原生写法**（`hook(executable).intercept { chain -> ... }`，无 `XposedHelpers` 封装）
 - 界面由 PreferenceFragment 迁移为 **miuix（Compose Multiplatform）** 风格
 
-## 功能
+## 适配范围
 
 适配os1~os3a15
 

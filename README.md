@@ -63,7 +63,6 @@ os1 **~** os3a15
 - **[LSPosed](https://github.com/LSPosed/LSPosed)** — 提供远程首选项与模块服务框架
 - **[miuix](https://github.com/compose-miuix-ui/miuix)**（Apache-2.0）— Compose Multiplatform 风格 UI 组件库
 - **[YukiHookAPI](https://github.com/HighCapable/YukiHookAPI)**（fankes）— 原项目使用的 Hook 框架，本项目的迁移逻辑参考了其封装的行为
-- **[Fuck_Home](https://github.com/NotWayOut/Fuck_Home)** — libxposed + miuix 模块工程结构的参考实现
 
 ## 许可证
 

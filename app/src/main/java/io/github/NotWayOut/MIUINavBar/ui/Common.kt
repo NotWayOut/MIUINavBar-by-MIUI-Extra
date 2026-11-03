@@ -353,7 +353,7 @@ fun FrameworkStatusCard() {
                             FrameworkStatus.NoRoot -> R.string.framework_no_root_tips
                         },
                         frameworkName,
-                        apiVersion ?: REQUIRED_API,
+                        REQUIRED_API,
                     ),
                     color = colors.content,
                     style = MiuixTheme.textStyles.body2,

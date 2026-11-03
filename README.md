@@ -50,9 +50,8 @@
 默认值在 `app/build.gradle.kts` 中，也可在 `gradle.properties` 中取消注释 `versionCode` / `versionName` 长期覆盖。
 
 签名配置从 `local.properties` 读取
-```
 
-## 致谢
+### 引用与致谢
 
 - **[Art_Chen](https://github.com/Art-Chen)** — 原项目 [MIUI-Extra-YukiAPI](https://github.com/Art-Chen/MIUI-Extra-YukiAPI)（MIUI Extra）的作者，小白条动画、沉浸式手势栏、自动透明度等功能的原始实现均来自该项目；喜欢他的作品可以 [请作者喝杯咖啡](https://afdian.com/a/art_chen)
 - **[libxposed](https://github.com/libxposed)** — 提供 API 101 及官方示例模块的 Hook 写法参考

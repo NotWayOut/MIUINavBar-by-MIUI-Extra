@@ -54,12 +54,12 @@
 ### 引用与致谢
 
 - **[Art_Chen](https://github.com/Art-Chen)** — 原项目 [MIUI-Extra-YukiAPI](https://github.com/Art-Chen/MIUI-Extra-YukiAPI)（MIUI Extra）的作者，小白条动画、沉浸式手势栏、自动透明度等功能的原始实现均来自该项目；喜欢他的作品可以 [请作者喝杯咖啡](https://afdian.com/a/art_chen)
+- **[Android Open Source Project](https://cs.android.com) — Google.
 - **[libxposed](https://github.com/libxposed)** — 提供 API 101 及官方示例模块的 Hook 写法参考
 - **[LSPosed](https://github.com/LSPosed/LSPosed)** — 提供远程首选项与模块服务框架
 - **[miuix](https://github.com/compose-miuix-ui/miuix)**（Apache-2.0）— Compose Multiplatform 风格 UI 组件库
 - **[YukiHookAPI](https://github.com/HighCapable/YukiHookAPI)**（fankes）— 原项目使用的 Hook 框架，本项目的迁移逻辑参考了其封装的行为
 - **[Fuck_Home](https://github.com/NotWayOut/Fuck_Home)** — libxposed + miuix 模块工程结构的参考实现
-- [Android Open Source Project](https://cs.android.com) — Google.
 
 ## 许可证
 

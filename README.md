@@ -29,7 +29,7 @@ os1 **~** os3a15
 | 项目 | 要求 |
 |---|---|
 | 框架 | 支持 libxposed API 101 的 Xposed 框架（如 LSPosed） |
-| 系统 | MIUI / HyperOS，Android 13（API 33）及以上 |
+| 系统 | HyperOS，Android 13（API 33）及以上 |
 | 权限 | Root（用于重启系统界面；小白条功能本身不依赖 Root） |
 | 作用域 | `com.android.systemui` |
 

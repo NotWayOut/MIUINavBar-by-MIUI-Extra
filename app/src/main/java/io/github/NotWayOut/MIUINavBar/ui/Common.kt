@@ -351,6 +351,10 @@ fun FrameworkStatusCard() {
                         )
 
                         FrameworkStatus.NoRoot -> MiuixIcons.Lock
+                        FrameworkStatus.Inactive -> ImageVector.vectorResource(
+                            R.drawable.ic_error_outline
+                        )
+
                         else -> MiuixIcons.Close
                     },
                     contentDescription = null,

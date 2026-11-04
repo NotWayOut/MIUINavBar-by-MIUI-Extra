@@ -21,6 +21,7 @@ import top.yukonga.miuix.kmp.basic.Card
 @Composable
 fun HomeHandleScreen(
     onNavigateToCustomAnim: () -> Unit,
+    onNavigateToAbout: () -> Unit,
     onHideIconChange: (Boolean) -> Unit,
     onRestartSystemUi: () -> Unit,
     onCreateBackupDocument: (String) -> Unit,
@@ -98,6 +99,10 @@ fun HomeHandleScreen(
                 ArrowRow(
                     title = stringResource(R.string.restore),
                     onClick = onPickDocument,
+                )
+                ArrowRow(
+                    title = stringResource(R.string.about_title),
+                    onClick = onNavigateToAbout,
                 )
             }
         }

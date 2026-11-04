@@ -43,7 +43,7 @@ data class SettingsActions(
     val onRestartSystemUi: () -> Unit,
 )
 
-private enum class SettingsScreen { Main, CustomAnim }
+private enum class SettingsScreen { Main, CustomAnim, About }
 
 @Composable
 fun SettingsApp(actions: SettingsActions) {
@@ -123,6 +123,7 @@ private fun AppContent(actions: SettingsActions) {
             when (current) {
                 SettingsScreen.Main -> HomeHandleScreen(
                     onNavigateToCustomAnim = { screen = SettingsScreen.CustomAnim },
+                    onNavigateToAbout = { screen = SettingsScreen.About },
                     onHideIconChange = actions.onHideIconChange,
                     onRestartSystemUi = actions.onRestartSystemUi,
                     onCreateBackupDocument = actions.onCreateBackupDocument,
@@ -130,6 +131,8 @@ private fun AppContent(actions: SettingsActions) {
                 )
 
                 SettingsScreen.CustomAnim -> CustomAnimScreen(onBack = { screen = SettingsScreen.Main })
+
+                SettingsScreen.About -> AboutScreen(onBack = { screen = SettingsScreen.Main })
             }
         }
     }

@@ -1,6 +1,7 @@
 package io.github.NotWayOut.MIUINavBar.hook
 
 import android.content.Context
+import android.os.Looper
 import android.util.Log
 import android.view.Choreographer
 import android.view.InputEvent
@@ -22,7 +23,6 @@ object ChenInputEventDispatcher {
     private var mInputMonitor: Any? = null
 
     private val isAboveU = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-    private val isAboveV = android.os.Build.VERSION.SDK_INT >= 35
 
     fun isInited(): Boolean = inited
 
@@ -58,22 +58,13 @@ object ChenInputEventDispatcher {
                 notifyListeners(args[0] as InputEvent)
             }
 
-            mInputEventReceiver = if (isAboveV) {
-                inputEventReceiverCls.declaredConstructors[0].newInstance(
-                    "ChenHomeHandleTouchHandler",
-                    inputChannel,
-                    looper,
-                    choreographer,
-                    chenListener
-                )
-            } else {
-                inputEventReceiverCls.declaredConstructors[0].newInstance(
-                    inputChannel,
-                    looper,
-                    choreographer,
-                    chenListener
-                )
-            }
+            mInputEventReceiver = createReceiver(
+                inputEventReceiverCls,
+                inputChannel,
+                looper,
+                choreographer,
+                chenListener,
+            )
             Log.i(MainHook.TAG, "[ChenInputEventDispatcher] init done on Android U+")
             inited = true
             return
@@ -98,6 +89,44 @@ object ChenInputEventDispatcher {
             .invoke(miuiGestureMonitorInstance, chenListener)
 
         inited = true
+    }
+
+    /**
+     * 构造 InputChannelCompat.InputEventReceiver。
+     *
+     * Android 15（V）起该构造器首位新增了 name 参数，部分 ROM 还会回移或调整参数，
+     * 因此按实际构造器签名匹配参数，避免写死 SDK 判断导致参数数量不匹配而崩溃。
+     */
+    private fun createReceiver(
+        cls: Class<*>,
+        inputChannel: Any,
+        looper: Looper,
+        choreographer: Choreographer,
+        listener: Any,
+    ): Any {
+        val constructor = cls.declaredConstructors.firstOrNull { candidate ->
+            candidate.parameterTypes.any { it.isInstance(listener) } &&
+                candidate.parameterTypes.all { type ->
+                    type == String::class.java ||
+                        type.name == "android.view.InputChannel" ||
+                        type == Looper::class.java ||
+                        type == Choreographer::class.java ||
+                        type.isInstance(listener)
+                }
+        } ?: throw NoSuchMethodException("${cls.name} <init>")
+
+        val args = constructor.parameterTypes.map { type ->
+            when {
+                type == String::class.java -> "ChenHomeHandleTouchHandler"
+                type.name == "android.view.InputChannel" -> inputChannel
+                type == Looper::class.java -> looper
+                type == Choreographer::class.java -> choreographer
+                type.isInstance(listener) -> listener
+                else -> throw IllegalArgumentException("Unsupported parameter: $type")
+            }
+        }.toTypedArray()
+
+        return constructor.apply { isAccessible = true }.newInstance(*args)
     }
 
     fun unregister() {

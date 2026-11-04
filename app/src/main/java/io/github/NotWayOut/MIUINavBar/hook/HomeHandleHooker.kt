@@ -73,6 +73,10 @@ class HomeHandleHooker(
 
     private var settingsDirty = true
 
+    private var prefsHasFileChanged: java.lang.reflect.Method? = null
+    private var prefsReloadMethod: java.lang.reflect.Method? = null
+    private var prefsReflectResolved = false
+
     private var mContext: Context? = null
     private var mHandler: Handler? = null
 
@@ -136,8 +140,10 @@ class HomeHandleHooker(
     fun hook() {
         MiBlurCompatUtils.classLoader = classLoader
 
-        prefs.registerOnSharedPreferenceChangeListener { _, _ -> settingsDirty = true }
-
+        // 部分框架的远程首选项不支持变更监听，注册失败时退化为按需 reload
+        runCatching {
+            prefs.registerOnSharedPreferenceChangeListener { _, _ -> settingsDirty = true }
+        }
         hookNavigationBarInflaterView()
         hookNavigationBar()
         hookTopActivityChanged()
@@ -148,6 +154,7 @@ class HomeHandleHooker(
     /* ---------------------------------- 配置读取 ---------------------------------- */
 
     private fun updateSettings(force: Boolean = false) {
+        refreshPrefsIfChanged()
         if (force || settingsDirty) {
             settingsDirty = false
             normalSettings = HomeHandleSettings.from(prefs, HomeHandleState.NORMAL)
@@ -158,6 +165,36 @@ class HomeHandleHooker(
             useMiBlur = prefs.getBoolean(KEY_HOME_HANDLE_BLUR_EFFECT, false)
             forceAlphaAtHome = prefs.getBoolean(KEY_HOME_HANDLE_FORCE_ALPHA_AT_HOME, false)
             noSpace = prefs.getBoolean(KEY_HOME_HANDLE_NO_SPACE, false)
+        }
+    }
+
+    /**
+     * 热更新配置：移植自 MIUI-Extra 的 XSharedPreferences.hasFileChanged() + reload() 机制。
+     *
+     * 当框架提供的远程首选项是文件型实现（XSharedPreferences）时，跨进程写入不会触发
+     * 变更监听，这里在每次交互读取配置前主动检测文件是否变化并重新加载。
+     */
+    private fun refreshPrefsIfChanged() {
+        if (settingsDirty) return
+
+        if (!prefsReflectResolved) {
+            prefsReflectResolved = true
+            prefsHasFileChanged = runCatching {
+                prefs.javaClass.getMethod("hasFileChanged")
+            }.getOrNull()
+            prefsReloadMethod = runCatching {
+                prefs.javaClass.getMethod("reload")
+            }.getOrNull()
+        }
+
+        val hasFileChanged = prefsHasFileChanged ?: return
+        val changed = runCatching {
+            hasFileChanged.invoke(prefs) as? Boolean
+        }.getOrNull() ?: return
+
+        if (changed) {
+            runCatching { prefsReloadMethod?.invoke(prefs) }
+            settingsDirty = true
         }
     }
 
@@ -521,7 +558,17 @@ class HomeHandleHooker(
                 mContext = chain.getArg(0) as Context
                 mHandler = Handler(Looper.getMainLooper())
 
-                ChenInputEventDispatcher.init(mContext!!, classLoader)
+                // 输入监听初始化失败时只禁用动画，避免异常冒泡导致 SystemUI 崩溃
+                runCatching {
+                    ChenInputEventDispatcher.init(mContext!!, classLoader)
+                }.onFailure {
+                    module.log(
+                        Log.ERROR,
+                        MainHook.TAG,
+                        "Failed to init input dispatcher, home handle animation disabled",
+                        it
+                    )
+                }
                 updateSettings(true)
 
                 if (ChenInputEventDispatcher.isInited()) {

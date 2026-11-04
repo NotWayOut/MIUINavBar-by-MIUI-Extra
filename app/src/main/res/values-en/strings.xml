@@ -66,4 +66,28 @@
     <string name="restart_failed">Failed to restart SystemUI, please check root permission</string>
 
 
+    <!-- About -->
+    <string name="about_title">About module</string>
+    <string name="about_description">An MIUI / HyperOS home handle (gesture bar) enhancement module built on libXposed API 101.</string>
+    <string name="about_use_miuix">Built with miuix</string>
+    <string name="about_use_miuix_summary">Compose Multiplatform style UI component library</string>
+    <string name="about_use_libxposed">Built on libXposed API 101</string>
+    <string name="about_use_libxposed_summary">Native hook API without XposedHelpers wrappers</string>
+    <string name="about_use_upstream">Based on MIUI-Extra</string>
+    <string name="about_use_upstream_summary">Original home handle implementation</string>
+    <string name="about_section_developers">Developers</string>
+    <string name="about_dev_self_summary">Author of this project</string>
+    <string name="about_dev_original_summary">Author of the original project</string>
+    <string name="about_section_others">Other</string>
+    <string name="about_source">Source code</string>
+    <string name="about_source_detail">GitHub repository</string>
+    <string name="about_issues">Issue tracker</string>
+    <string name="about_issues_detail">Report issues or suggest features</string>
+    <string name="about_donate">Donate</string>
+    <string name="about_donate_detail">Buy the original author a coffee</string>
+    <string name="about_license">License</string>
+    <string name="about_license_detail">GNU AGPL-3.0-only</string>
+    <string name="about_section_references">References</string>
+    <string name="about_copyright">© 2026 NotWayOut\nRewritten from the Art-Chen MIUI-Extra project; product names and trademarks belong to their respective owners.</string>
+
 </resources>

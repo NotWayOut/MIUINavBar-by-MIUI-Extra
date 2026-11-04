@@ -76,7 +76,7 @@
     <string name="about_use_upstream">此模块基于 MIUI-Extra</string>
     <string name="about_use_upstream_summary">小白条功能的原始实现</string>
     <string name="about_section_developers">开发者</string>
-    <string name="about_dev_self_summary">本项目作者</string>
+    <string name="about_dev_self_summary">提取原项目功能使用libxposed api 101重写</string>
     <string name="about_dev_original_summary">原项目作者</string>
     <string name="about_section_others">其它</string>
     <string name="about_source">源代码</string>

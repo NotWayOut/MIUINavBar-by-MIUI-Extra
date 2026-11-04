@@ -76,7 +76,7 @@
     <string name="about_use_upstream">Based on MIUI-Extra</string>
     <string name="about_use_upstream_summary">Original home handle implementation</string>
     <string name="about_section_developers">Developers</string>
-    <string name="about_dev_self_summary">Author of this project</string>
+    <string name="about_dev_self_summary">Rewritten using the libxposed api 101</string>
     <string name="about_dev_original_summary">Author of the original project</string>
     <string name="about_section_others">Other</string>
     <string name="about_source">Source code</string>

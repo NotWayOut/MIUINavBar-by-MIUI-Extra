@@ -2,7 +2,6 @@ package io.github.NotWayOut.MIUINavBar.ui
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,9 +10,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -28,19 +30,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.github.NotWayOut.MIUINavBar.App
+import io.github.NotWayOut.MIUINavBar.BuildConfig
 import io.github.NotWayOut.MIUINavBar.R
 import io.github.NotWayOut.MIUINavBar.config.PREFS_GROUP
 import top.yukonga.miuix.kmp.basic.Button
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.Slider
@@ -53,11 +59,11 @@ import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Back
 import top.yukonga.miuix.kmp.icon.extended.Close
 import top.yukonga.miuix.kmp.icon.extended.Lock
-import top.yukonga.miuix.kmp.icon.extended.Ok
 import top.yukonga.miuix.kmp.overlay.OverlayDialog
 import top.yukonga.miuix.kmp.preference.ArrowPreference
 import top.yukonga.miuix.kmp.preference.SwitchPreference
 import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.utils.PressFeedbackType
 import kotlin.math.roundToInt
 
 /**
@@ -293,9 +299,9 @@ private const val DEFAULT_FRAMEWORK_NAME = "LSPosed"
 
 private enum class FrameworkStatus { Ok, Unsupported, Inactive, NoRoot }
 
-private data class StatusColors(val background: Color, val content: Color)
+private data class StatusColors(val background: Color, val accent: Color)
 
-/** 主页顶部框架状态卡片：展示模块激活状态、框架 API 版本与 Root 权限 */
+/* * 主页顶部框架状态卡片：展示模块激活状态、框架 API 版本与 Root 权限  */
 @Composable
 fun FrameworkStatusCard() {
     val service = App.serviceState.value
@@ -304,9 +310,10 @@ fun FrameworkStatusCard() {
     }
     val apiVersion = remember(service) { runCatching { service?.apiVersion }.getOrNull() }
     var rootGranted by remember(service) { mutableStateOf<Boolean?>(null) }
+    var refreshTick by remember { mutableIntStateOf(0) }
 
     // 仅在模块已激活且框架版本满足要求时检测 Root，避免无谓的授权弹窗
-    LaunchedEffect(service, apiVersion) {
+    LaunchedEffect(service, apiVersion, refreshTick) {
         if (service != null && apiVersion != null && apiVersion >= REQUIRED_API) {
             rootGranted = withContext(Dispatchers.IO) { checkRoot() }
         }
@@ -320,15 +327,42 @@ fun FrameworkStatusCard() {
     }
     val colors = statusColors(status)
 
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .background(colors.background)
-                .padding(horizontal = 20.dp, vertical = 18.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.defaultColors(
+            color = colors.background,
+            contentColor = MiuixTheme.colorScheme.onSurface,
+        ),
+        onClick = { refreshTick++ },
+        showIndication = true,
+        pressFeedbackType = PressFeedbackType.Tilt,
+    ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .offset(50.dp, 38.dp),
+                contentAlignment = Alignment.BottomEnd,
+            ) {
+                Icon(
+                    imageVector = when (status) {
+                        FrameworkStatus.Ok -> ImageVector.vectorResource(
+                            R.drawable.ic_check_circle_outline
+                        )
+
+                        FrameworkStatus.NoRoot -> MiuixIcons.Lock
+                        else -> MiuixIcons.Close
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.size(170.dp),
+                    tint = colors.accent,
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ) {
                 Text(
                     text = stringResource(
                         when (status) {
@@ -338,12 +372,17 @@ fun FrameworkStatusCard() {
                             FrameworkStatus.NoRoot -> R.string.framework_no_root
                         }
                     ),
-                    color = colors.content,
-                    style = MiuixTheme.textStyles.title1.copy(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
                 )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = stringResource(R.string.module_version, BuildConfig.VERSION_NAME),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MiuixTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                )
+                Spacer(Modifier.height(36.dp))
                 Text(
                     text = stringResource(
                         when (status) {
@@ -355,20 +394,11 @@ fun FrameworkStatusCard() {
                         frameworkName,
                         REQUIRED_API,
                     ),
-                    color = colors.content,
-                    style = MiuixTheme.textStyles.body2,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MiuixTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 )
             }
-            Icon(
-                imageVector = when (status) {
-                    FrameworkStatus.Ok -> MiuixIcons.Ok
-                    FrameworkStatus.NoRoot -> MiuixIcons.Lock
-                    else -> MiuixIcons.Close
-                },
-                contentDescription = null,
-                tint = colors.content,
-                modifier = Modifier.size(56.dp),
-            )
         }
     }
 }
@@ -385,23 +415,20 @@ private fun checkRoot(): Boolean = runCatching {
 private fun statusColors(status: FrameworkStatus): StatusColors {
     val isDark = MiuixTheme.colorScheme.background.luminanceIsDark()
     return when (status) {
-        FrameworkStatus.Ok -> if (isDark) {
-            StatusColors(Color(0xFF1B3B24), Color(0xFFA5D6A7))
-        } else {
-            StatusColors(Color(0xFFE1F2E5), Color(0xFF1B5E20))
-        }
+        FrameworkStatus.Ok -> StatusColors(
+            background = if (isDark) Color(0xFF1A3825) else Color(0xFFDFFAE4),
+            accent = Color(0xFF36D167),
+        )
 
-        FrameworkStatus.NoRoot -> if (isDark) {
-            StatusColors(Color(0xFF3A2F14), Color(0xFFFFE082))
-        } else {
-            StatusColors(Color(0xFFFFF8E1), Color(0xFF8D6E00))
-        }
+        FrameworkStatus.NoRoot -> StatusColors(
+            background = if (isDark) Color(0xFF3A2F14) else Color(0xFFFFF6DE),
+            accent = Color(0xFFFFB300),
+        )
 
-        else -> if (isDark) {
-            StatusColors(Color(0xFF3E1B1B), Color(0xFFEF9A9A))
-        } else {
-            StatusColors(Color(0xFFFFEBEE), Color(0xFFB71C1C))
-        }
+        else -> StatusColors(
+            background = if (isDark) Color(0xFF381A1A) else Color(0xFFFAEEEE),
+            accent = Color(0xFFF72727),
+        )
     }
 }
 

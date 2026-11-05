@@ -17,9 +17,6 @@ const val KEY_HOME_HANDLE_NO_SPACE = "chen_home_handle_no_space"
 /** 在小白条上应用模糊材质 */
 const val KEY_HOME_HANDLE_BLUR_EFFECT = "chen_home_handle_blur_effect"
 
-/** 禁用小白条跟手位移 */
-const val KEY_HOME_HANDLE_DISABLE_MOVE = "home_handle_disable_move_event"
-
 /** 在桌面时强制使用透明度调整 */
 const val KEY_HOME_HANDLE_FORCE_ALPHA_AT_HOME = "home_handle_force_alpha_at_home"
 

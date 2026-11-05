@@ -18,9 +18,6 @@
     <!-- 模糊材质 -->
     <string name="chen_home_handle_blur_effect_title">在小白条上应用模糊材质(需要开启高级材质)</string>
 
-    <!-- 跟手位移 -->
-    <string name="home_handle_disable_move_event_title">禁用小白条跟手位移</string>
-
     <!-- 自定义动画 -->
     <string name="normal_state_title">默认时</string>
     <string name="pressed_state_title">按下时</string>

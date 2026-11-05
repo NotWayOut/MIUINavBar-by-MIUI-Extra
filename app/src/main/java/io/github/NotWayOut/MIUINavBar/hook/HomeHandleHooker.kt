@@ -30,7 +30,6 @@ import io.github.NotWayOut.MIUINavBar.MainHook
 import io.github.NotWayOut.MIUINavBar.config.HomeHandleSettings
 import io.github.NotWayOut.MIUINavBar.config.HomeHandleState
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_BLUR_EFFECT
-import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_DISABLE_MOVE
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_FORCE_ALPHA_AT_HOME
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_NO_SPACE
 import io.github.NotWayOut.MIUINavBar.config.RemoteConfig
@@ -90,7 +89,6 @@ class HomeHandleHooker(
     private var mLightColor = -1
     private var mDarkColor = -1
     private var orientation = 0
-    private var disableHomeHandleMovement = false
     private var forceAlphaAtHome = false
     private var noSpace = false
 
@@ -161,7 +159,6 @@ class HomeHandleHooker(
             pressedSettings = HomeHandleSettings.from(prefs, HomeHandleState.PRESSED)
             onHomeSettings = HomeHandleSettings.from(prefs, HomeHandleState.HOME)
 
-            disableHomeHandleMovement = prefs.getBoolean(KEY_HOME_HANDLE_DISABLE_MOVE, false)
             useMiBlur = prefs.getBoolean(KEY_HOME_HANDLE_BLUR_EFFECT, false)
             forceAlphaAtHome = prefs.getBoolean(KEY_HOME_HANDLE_FORCE_ALPHA_AT_HOME, false)
             noSpace = prefs.getBoolean(KEY_HOME_HANDLE_NO_SPACE, false)
@@ -459,11 +456,6 @@ class HomeHandleHooker(
                         || (mHomeHandle.windowVisibility != View.VISIBLE))
             ) {
                 // 小白条透明时丢弃事件
-                return@post
-            }
-
-            if (disableHomeHandleMovement && motionEvent.actionMasked == MotionEvent.ACTION_MOVE) {
-                // 禁用跟手位移时丢弃移动事件
                 return@post
             }
 

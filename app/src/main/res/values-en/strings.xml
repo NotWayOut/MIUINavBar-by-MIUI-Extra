@@ -18,9 +18,6 @@
     <!-- Blur material -->
     <string name="chen_home_handle_blur_effect_title">Apply blur material on the home handle (advanced material required)</string>
 
-    <!-- Follow-finger movement -->
-    <string name="home_handle_disable_move_event_title">Disable home handle follow movement</string>
-
     <!-- Custom animation -->
     <string name="normal_state_title">Normal</string>
     <string name="pressed_state_title">Pressed</string>

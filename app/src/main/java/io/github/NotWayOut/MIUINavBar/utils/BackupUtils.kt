@@ -27,7 +27,6 @@ object BackupUtils {
         add(io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_ANIM)
         add(io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_NO_SPACE)
         add(io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_BLUR_EFFECT)
-        add(io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_DISABLE_MOVE)
         add(io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_FORCE_ALPHA_AT_HOME)
         for (state in HomeHandleState.entries) {
             add("home_handle_setting_transdegree_${state.suffix}")

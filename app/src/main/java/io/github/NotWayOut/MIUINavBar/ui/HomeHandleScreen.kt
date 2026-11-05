@@ -10,7 +10,6 @@ import io.github.NotWayOut.MIUINavBar.R
 import io.github.NotWayOut.MIUINavBar.config.KEY_HIDE_LAUNCHER_ICON
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_ANIM
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_BLUR_EFFECT
-import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_DISABLE_MOVE
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_NO_SPACE
 import io.github.NotWayOut.MIUINavBar.utils.BackupUtils
 import top.yukonga.miuix.kmp.basic.Card
@@ -68,11 +67,6 @@ fun HomeHandleScreen(
                 SwitchRow(
                     key = KEY_HOME_HANDLE_BLUR_EFFECT,
                     title = stringResource(R.string.chen_home_handle_blur_effect_title),
-                    enabled = masterEnabled,
-                )
-                SwitchRow(
-                    key = KEY_HOME_HANDLE_DISABLE_MOVE,
-                    title = stringResource(R.string.home_handle_disable_move_event_title),
                     enabled = masterEnabled,
                 )
             }

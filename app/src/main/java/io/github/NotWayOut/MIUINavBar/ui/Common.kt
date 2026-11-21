@@ -291,6 +291,42 @@ fun InputDialog(
     }
 }
 
+/** 确认对话框 */
+@Composable
+fun ConfirmDialog(
+    title: String,
+    summary: String,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    OverlayDialog(
+        title = title,
+        summary = summary,
+        show = true,
+        onDismissRequest = onDismiss,
+    ) {
+        RegisterDialogDismiss(show = true, onDismiss = onDismiss)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Button(
+                onClick = onDismiss,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(text = stringResource(R.string.cancel))
+            }
+            Button(
+                onClick = onConfirm,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColorsPrimary(),
+            ) {
+                Text(text = stringResource(R.string.confirm))
+            }
+        }
+    }
+}
+
 /** libxposed API 101 为模块所需的最低框架 API 版本 */
 private const val REQUIRED_API = 101
 

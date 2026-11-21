@@ -16,7 +16,8 @@
     <string name="chen_home_handle_no_space_summary">The gesture bar will no longer take up space (may introduce layout errors, use with caution)</string>
 
     <!-- Blur material -->
-    <string name="chen_home_handle_blur_effect_title">Apply blur material on the home handle (advanced material required)</string>
+    <string name="chen_home_handle_blur_effect_title">Apply blur material on the home handle</string>
+    <string name="chen_home_handle_blur_effect_summary">Advanced material required</string>
 
     <!-- Custom animation -->
     <string name="normal_state_title">Normal</string>
@@ -35,10 +36,12 @@
 
     <!-- Common -->
     <string name="ok">OK</string>
+    <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="input_value_invalid">Input value invalid!</string>
     <string name="need_restart_systemui">This setting requires a SystemUI restart to take effect</string>
     <string name="restart_systemui">Restart SystemUI</string>
+    <string name="restart_systemui_confirm">Restart SystemUI now?</string>
     <string name="hide_launcher_icon">Hide launcher icon</string>
 
     <!-- Backup & restore -->

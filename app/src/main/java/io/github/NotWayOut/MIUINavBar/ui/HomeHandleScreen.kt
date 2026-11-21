@@ -31,10 +31,24 @@ fun HomeHandleScreen(
     var masterEnabled by remember(prefs, version) {
         mutableStateOf(prefs.getBoolean(KEY_HOME_HANDLE_ANIM, false))
     }
+    var showRestartDialog by remember { mutableStateOf(false) }
 
     SettingsScaffold(
         title = stringResource(R.string.home_handle_header),
         showModuleName = true,
+        overlay = {
+            if (showRestartDialog) {
+                ConfirmDialog(
+                    title = stringResource(R.string.restart_systemui),
+                    summary = stringResource(R.string.restart_systemui_confirm),
+                    onDismiss = { showRestartDialog = false },
+                    onConfirm = {
+                        showRestartDialog = false
+                        onRestartSystemUi()
+                    },
+                )
+            }
+        },
     ) {
         item {
             FrameworkStatusCard()
@@ -67,6 +81,7 @@ fun HomeHandleScreen(
                 SwitchRow(
                     key = KEY_HOME_HANDLE_BLUR_EFFECT,
                     title = stringResource(R.string.chen_home_handle_blur_effect_title),
+                    summary = stringResource(R.string.chen_home_handle_blur_effect_summary),
                     enabled = masterEnabled,
                 )
             }
@@ -82,7 +97,7 @@ fun HomeHandleScreen(
                 ArrowRow(
                     title = stringResource(R.string.restart_systemui),
                     summary = stringResource(R.string.need_restart_systemui),
-                    onClick = onRestartSystemUi,
+                    onClick = { showRestartDialog = true },
                 )
                 ArrowRow(
                     title = stringResource(R.string.backup),

@@ -88,6 +88,11 @@
     <string name="about_license">开源许可</string>
     <string name="about_license_detail">GNU AGPL-3.0-only</string>
     <string name="about_section_references">引用</string>
+    <string name="about_ref_upstream">小白条功能的原始实现</string>
+    <string name="about_ref_libxposed">原生 Hook API 101 及其示例</string>
+    <string name="about_ref_miuix">Compose Multiplatform 风格 UI 组件库</string>
+    <string name="about_ref_yukihook">原项目 Hook 框架，迁移逻辑参考</string>
+    <string name="about_ref_xiaomihelper">关于页参考</string>
     <string name="about_copyright">© 2026 NotWayOut\n基于 Art-Chen 的 MIUI-Extra 改写；产品名称与商标归各自权利人所有。</string>
 
 </resources>

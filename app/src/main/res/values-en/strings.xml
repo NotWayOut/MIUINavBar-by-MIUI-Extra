@@ -88,6 +88,11 @@
     <string name="about_license">License</string>
     <string name="about_license_detail">GNU AGPL-3.0-only</string>
     <string name="about_section_references">References</string>
+    <string name="about_ref_upstream">Original home handle implementation</string>
+    <string name="about_ref_libxposed">Native hook API 101 and examples</string>
+    <string name="about_ref_miuix">Compose Multiplatform style UI component library</string>
+    <string name="about_ref_yukihook">Hook framework of the original project, migration reference</string>
+    <string name="about_ref_xiaomihelper">About page reference</string>
     <string name="about_copyright">© 2026 NotWayOut\nRewritten from the Art-Chen MIUI-Extra project; product names and trademarks belong to their respective owners.</string>
 
 </resources>

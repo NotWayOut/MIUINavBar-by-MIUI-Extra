@@ -117,31 +117,38 @@ fun AboutScreen(onBack: () -> Unit) {
             Card {
                 AboutIconRow(
                     title = "MIUI-Extra-YukiAPI",
-                    summary = "Art_Chen",
+                    summary = stringResource(R.string.about_ref_upstream),
                     icon = MiuixIcons.Link,
                     uriHandler = uriHandler,
                     url = "https://github.com/Art-Chen/MIUI-Extra-YukiAPI",
                 )
                 AboutIconRow(
                     title = "libXposed API 101",
-                    summary = "libxposed",
+                    summary = stringResource(R.string.about_ref_libxposed),
                     icon = MiuixIcons.Link,
                     uriHandler = uriHandler,
                     url = "https://github.com/libxposed",
                 )
                 AboutIconRow(
                     title = "miuix",
-                    summary = "Apache-2.0",
+                    summary = stringResource(R.string.about_ref_miuix),
                     icon = MiuixIcons.Link,
                     uriHandler = uriHandler,
                     url = "https://github.com/compose-miuix-ui/miuix",
                 )
                 AboutIconRow(
                     title = "YukiHookAPI",
-                    summary = "HighCapable",
+                    summary = stringResource(R.string.about_ref_yukihook),
                     icon = MiuixIcons.Link,
                     uriHandler = uriHandler,
                     url = "https://github.com/HighCapable/YukiHookAPI",
+                )
+                AboutIconRow(
+                    title = "XiaomiHelper",
+                    summary = stringResource(R.string.about_ref_xiaomihelper),
+                    icon = MiuixIcons.Link,
+                    uriHandler = uriHandler,
+                    url = "https://github.com/HowieHChen/XiaomiHelper",
                 )
             }
         }

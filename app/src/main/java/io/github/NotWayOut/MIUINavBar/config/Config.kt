@@ -8,6 +8,9 @@ import io.github.NotWayOut.MIUINavBar.MainHook
 /** 模块与 SystemUI 进程共享的配置组名 */
 const val PREFS_GROUP = "chen_main_settings"
 
+/** 配置变更广播：设置页写入配置后通知 SystemUI 立即重新读取 */
+const val ACTION_CONFIG_CHANGED = "io.github.NotWayOut.MIUINavBar.action.CONFIG_CHANGED"
+
 /** 小白条动画总开关 */
 const val KEY_HOME_HANDLE_ANIM = "chen_home_handle_anim"
 

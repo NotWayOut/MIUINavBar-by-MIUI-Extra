@@ -15,6 +15,7 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.InputEvent
 import android.view.MotionEvent
@@ -27,6 +28,7 @@ import android.widget.TextView
 import android.widget.Toast
 import io.github.libxposed.api.XposedModule
 import io.github.NotWayOut.MIUINavBar.MainHook
+import io.github.NotWayOut.MIUINavBar.config.ACTION_CONFIG_CHANGED
 import io.github.NotWayOut.MIUINavBar.config.HomeHandleSettings
 import io.github.NotWayOut.MIUINavBar.config.HomeHandleState
 import io.github.NotWayOut.MIUINavBar.config.KEY_HOME_HANDLE_BLUR_EFFECT
@@ -41,7 +43,6 @@ import io.github.NotWayOut.MIUINavBar.hook.MiBlurCompatUtils.setMiBackgroundBlur
 import io.github.NotWayOut.MIUINavBar.hook.MiBlurCompatUtils.setMiViewBlurMode
 import io.github.NotWayOut.MIUINavBar.hook.MiBlurCompatUtils.setPassWindowBlurEnabledCompat
 import java.lang.reflect.Field
-import kotlin.math.abs
 
 /**
  * 小白条（手势线）动画 Hook。
@@ -75,6 +76,7 @@ class HomeHandleHooker(
     private var prefsHasFileChanged: java.lang.reflect.Method? = null
     private var prefsReloadMethod: java.lang.reflect.Method? = null
     private var prefsReflectResolved = false
+    private var lastPrefsCheckElapsed = 0L
 
     private var mContext: Context? = null
     private var mHandler: Handler? = null
@@ -84,7 +86,6 @@ class HomeHandleHooker(
     private var mHomeHandleId = -1
     private var barHeight = 0
     private var origBarHeight = 0
-    private var yOffset = 0f
     private var useMiBlur = false
     private var mLightColor = -1
     private var mDarkColor = -1
@@ -109,9 +110,6 @@ class HomeHandleHooker(
 
     private var currBlurRadius = 0
     private var lastBlurRadius = 0
-
-    private var baseX = -1f
-    private var baseY = -1f
 
     private val opacityHomeHandleRunnable = Runnable {
         if (alphaAnimator.isRunning) {
@@ -166,13 +164,17 @@ class HomeHandleHooker(
     }
 
     /**
-     * 热更新配置：移植自 MIUI-Extra 的 XSharedPreferences.hasFileChanged() + reload() 机制。
+     * 热更新配置的兜底路径。
      *
-     * 当框架提供的远程首选项是文件型实现（XSharedPreferences）时，跨进程写入不会触发
-     * 变更监听，这里在每次交互读取配置前主动检测文件是否变化并重新加载。
+     * 正常情况下配置变更由设置页广播（[ACTION_CONFIG_CHANGED]）触发，几乎零开销；
+     * 这里仅以低频（2 秒）检查文件变化，兼容广播未能送达的框架，避免每次触摸都做文件 stat。
      */
     private fun refreshPrefsIfChanged() {
         if (settingsDirty) return
+
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastPrefsCheckElapsed < 2000L) return
+        lastPrefsCheckElapsed = now
 
         if (!prefsReflectResolved) {
             prefsReflectResolved = true
@@ -255,18 +257,12 @@ class HomeHandleHooker(
         yAnimator.start()
     }
 
-    private fun cancelHomeHandleXYAnim() {
-        xAnimator.cancel()
-        yAnimator.cancel()
-    }
-
     private fun animateHomeHandleXYToNormal(type: HomeHandleState) {
         val setting = when (type) {
             HomeHandleState.NORMAL -> normalSettings
             HomeHandleState.HOME -> onHomeSettings
             HomeHandleState.PRESSED -> pressedSettings
         }
-        yOffset = setting.offsetY
         animateHomeHandleX(setting.xyAnimDuration, setting.offsetX)
         animateHomeHandleY(setting.xyAnimDuration, setting.offsetY)
     }
@@ -471,35 +467,12 @@ class HomeHandleHooker(
                     motionEvent.y > screenRealHeight - origBarHeight
                 }
 
-            if (isNavigationBarArea) {
-                if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
-                    if (!mIsInHome || mHomeHandle.alpha != 0f) {
-                        opacityHomeHandle(HomeHandleState.PRESSED)
-                        animateHomeHandleXYToNormal(HomeHandleState.PRESSED)
-                    }
-
-                    baseX = motionEvent.x
-                    baseY = motionEvent.y
-                    motionTriggered = true
+            if (isNavigationBarArea && motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
+                if (!mIsInHome || mHomeHandle.alpha != 0f) {
+                    opacityHomeHandle(HomeHandleState.PRESSED)
+                    animateHomeHandleXYToNormal(HomeHandleState.PRESSED)
                 }
-                if (motionEvent.actionMasked == MotionEvent.ACTION_MOVE && motionTriggered && orientation == 0) {
-                    val offsetNeeded = -(baseY - motionEvent.y) * 0.15f + yOffset
-                    if (abs(offsetNeeded) < barHeight / 2 - 6) {
-                        mHomeHandle.translationY = offsetNeeded
-                    }
-                }
-            }
-
-            if (motionEvent.actionMasked == MotionEvent.ACTION_MOVE && motionTriggered) {
-                cancelHomeHandleXYAnim()
-                if (orientation != 0) {
-                    // 横屏保留一点位移效果而不是完全固定
-                    val offsetNeeded = -(baseY - motionEvent.y) * 0.02f + yOffset
-                    if (abs(offsetNeeded) < barHeight / 2 + 6) {
-                        mHomeHandle.translationY = offsetNeeded
-                    }
-                }
-                mHomeHandle.translationX = -(baseX - motionEvent.x) * 0.2f
+                motionTriggered = true
             }
 
             if (motionEvent.actionMasked == MotionEvent.ACTION_UP && motionTriggered) {
@@ -575,12 +548,15 @@ class HomeHandleHooker(
                             Intent.ACTION_USER_PRESENT -> onUserPresent()
                             "chen.action.home.blur.state.switched" ->
                                 onHomeBlurChanged(intent.getBooleanExtra("active", false))
+
+                            ACTION_CONFIG_CHANGED -> settingsDirty = true
                         }
                     }
                 }
 
                 val eventFilter = IntentFilter("chen.action.home.blur.state.switched")
                 eventFilter.addAction(Intent.ACTION_USER_PRESENT)
+                eventFilter.addAction(ACTION_CONFIG_CHANGED)
                 mContext!!.registerReceiver(eventListener, eventFilter)
                 null
             }

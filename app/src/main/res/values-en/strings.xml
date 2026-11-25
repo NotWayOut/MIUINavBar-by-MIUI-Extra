@@ -39,7 +39,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="input_value_invalid">Input value invalid!</string>
-    <string name="need_restart_systemui">This setting requires a SystemUI restart to take effect</string>
+    <string name="need_restart_systemui">Restart SystemUI for changes other than animation parameters</string>
     <string name="restart_systemui">Restart SystemUI</string>
     <string name="restart_systemui_confirm">Restart SystemUI now?</string>
     <string name="hide_launcher_icon">Hide launcher icon</string>

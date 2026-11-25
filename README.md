@@ -2,7 +2,7 @@
 
 基于 **libxposed API 101** 的 MIUI / HyperOS 小白条（手势栏）增强模块。
 
-本项目从 [MIUI-Extra-YukiAPI](https://github.com/Art-Chen/MIUI-Extra-YukiAPI)（MIUI Extra，作者 [Art_Chen](https://github.com/Art-Chen)）中**提取了小白条相关的全部功能**，并进行了彻底重写：
+本项目从 [MIUI-Extra-YukiAPI](https://github.com/Art-Chen/MIUI-Extra-YukiAPI)（MIUI Extra，作者 [Art_Chen](https://github.com/Art-Chen)）中**提取了小白条相关的部分功能**，并进行了彻底重写：
 
 - Hook 层由 YukiHookAPI 迁移为 **libxposed API 101 原生写法**（`hook(executable).intercept { chain -> ... }`，无 `XposedHelpers` 封装）
 - 界面由 PreferenceFragment 迁移为 **miuix（Compose Multiplatform）** 风格
@@ -17,7 +17,7 @@
 - **模糊材质**：在小白条上应用 MIUI 高级材质模糊（需系统开启高级材质）
 - **配置备份 / 恢复**：支持miuiextra的备份文件，只识别已迁移功能（JSON 格式，导入限制 `.json` 后缀）
 
-> 原模块中的「小白条动画增强模式」与「手势栏隐藏时隐藏小白条」未做迁移。
+> 原模块中的「小白条动画增强模式」与「手势栏隐藏时隐藏小白条」未做迁移，性能开销很大，不建议使用。
 
 ## 环境要求
 
@@ -33,13 +33,13 @@
 1. 在 Xposed 管理器中激活 **MIUINavBar**，确认作用域包含 `com.android.systemui`
 2. 重启系统界面（模块内提供一键重启，或 `su -c killall com.android.systemui`）
 3. 打开模块，开启「总开关」并按需调整各项参数
-4. 修改参数后小白条动画即时生效；涉及结构的变化（如沉浸式手势栏）建议重启系统界面
+4. 修改参数后小白条动画即时生效，以外操作建议重启系统界面
 
 ## 编译
 
 ```bash
 # Debug
-./gradlew assembleDebug
+.\gradlew assembleDebug
 
 # Release（R8 混淆 + 资源压缩）
 .\gradlew :app:assembleRelease -PversionCode=100 -PversionName="1.0.0"

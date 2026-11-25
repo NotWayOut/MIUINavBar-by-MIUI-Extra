@@ -39,7 +39,7 @@
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
     <string name="input_value_invalid">输入数值无效!</string>
-    <string name="need_restart_systemui">该设置需要重启系统界面才能生效</string>
+    <string name="need_restart_systemui">除动画参数外，均需重启系统界面</string>
     <string name="restart_systemui">重启系统界面</string>
     <string name="restart_systemui_confirm">确定要重启系统界面吗？</string>
     <string name="hide_launcher_icon">隐藏桌面图标</string>

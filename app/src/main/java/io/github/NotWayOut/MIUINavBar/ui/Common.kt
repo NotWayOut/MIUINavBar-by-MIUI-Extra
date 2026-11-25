@@ -1,6 +1,7 @@
 package io.github.NotWayOut.MIUINavBar.ui
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import kotlinx.coroutines.withContext
 import io.github.NotWayOut.MIUINavBar.App
 import io.github.NotWayOut.MIUINavBar.BuildConfig
 import io.github.NotWayOut.MIUINavBar.R
+import io.github.NotWayOut.MIUINavBar.config.ACTION_CONFIG_CHANGED
 import io.github.NotWayOut.MIUINavBar.config.PREFS_GROUP
 import top.yukonga.miuix.kmp.basic.Button
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
@@ -93,12 +95,20 @@ fun rememberSharedPreferences(): SharedPreferences {
 }
 
 /** 配置状态：版本号在配置变化时自增，供依赖配置的界面刷新 */
-object PrefsState {
-    val version = mutableIntStateOf(0)
+object PrefsState {    val version = mutableIntStateOf(0)
 
     /** 配置发生变化（如恢复备份）后调用，通知界面刷新 */
     fun notifyChanged() {
         version.intValue += 1
+    }
+}
+
+/** 通知 SystemUI 配置已变更，触发小白条配置热刷新（仅在写入配置时调用） */
+fun notifySystemUiConfigChanged(context: Context) {
+    runCatching {
+        context.sendBroadcast(
+            Intent(ACTION_CONFIG_CHANGED).setPackage("com.android.systemui")
+        )
     }
 }
 
@@ -146,6 +156,7 @@ fun SwitchRow(
     onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
     val prefs = rememberSharedPreferences()
+    val context = LocalContext.current
     val version = PrefsState.version.value
     var checked by remember(prefs, key, version) {
         mutableStateOf(prefs.getBoolean(key, defaultValue))
@@ -157,6 +168,7 @@ fun SwitchRow(
         onCheckedChange = {
             checked = it
             prefs.edit().putBoolean(key, it).apply()
+            notifySystemUiConfigChanged(context)
             onCheckedChange?.invoke(it)
         },
         enabled = enabled,
@@ -174,6 +186,7 @@ fun SliderRow(
     unit: String,
 ) {
     val prefs = rememberSharedPreferences()
+    val context = LocalContext.current
     val version = PrefsState.version.value
     var value by remember(prefs, key, version) {
         mutableIntStateOf(prefs.getInt(key, defaultValue))
@@ -204,7 +217,10 @@ fun SliderRow(
         Slider(
             value = value.toFloat(),
             onValueChange = { value = it.roundToInt() },
-            onValueChangeFinished = { prefs.edit().putInt(key, value).apply() },
+            onValueChangeFinished = {
+                prefs.edit().putInt(key, value).apply()
+                notifySystemUiConfigChanged(context)
+            },
             modifier = Modifier.padding(top = 4.dp),
             valueRange = min.toFloat()..max.toFloat(),
         )
@@ -220,6 +236,7 @@ fun SliderRow(
                 if (input != null && input in min..max) {
                     value = input
                     prefs.edit().putInt(key, input).apply()
+                    notifySystemUiConfigChanged(context)
                 }
                 showDialog = false
             },

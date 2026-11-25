@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import io.github.NotWayOut.MIUINavBar.R
 import io.github.NotWayOut.MIUINavBar.config.localConfig
 import io.github.NotWayOut.MIUINavBar.ui.PrefsState
+import io.github.NotWayOut.MIUINavBar.ui.notifySystemUiConfigChanged
 import io.github.NotWayOut.MIUINavBar.ui.SettingsActions
 import io.github.NotWayOut.MIUINavBar.ui.SettingsApp
 import io.github.NotWayOut.MIUINavBar.utils.BackupUtils
@@ -32,6 +33,7 @@ class SettingsActivity : ComponentActivity() {
             // 恢复成功后主动通知界面刷新（远程首选项的监听不一定覆盖同实例写入）
             if (BackupUtils.handleReadDocument(this, localConfig(this), it)) {
                 PrefsState.notifyChanged()
+                notifySystemUiConfigChanged(this)
             }
         }
     }
